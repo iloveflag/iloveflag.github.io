@@ -353,6 +353,45 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >
+            
+                <span>kali下的wpscan破解wordpress</span>
+        </a>
+        <div class="abstract-content">
+            wpscan –update 更新（要梯子）
+wpscan -u http://192.168.154.128/wordpress -e u vp
+http://192.168.154.128/wordpress为我的wordpress地址
+-e 参数就是enumerate （列举，枚举，数）
+u 扫描后台用户
+vp 扫描容易受攻击的插件
+我的后台有两个用户，我们选择admin用户进行破解
+wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
+-U 指定用户
+–wordlist 指定字典破解
+/key...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/17</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%99%A8/" >
             
                 <span>centos6.4配置dns服务器</span>
@@ -1532,9 +1571,26 @@ TIP:在这里将我的wlan0转换成了wlan0mon
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 57
+        Total : 58
         </div>
         <!-- search  -->
         
@@ -1547,6 +1603,11 @@ TIP:在这里将我的wlan0转换成了wlan0mon
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2020/09/23/RSA/" >RSA与费马小定理</a>
+        </li>
     
     
         <li class="archive-post-item">

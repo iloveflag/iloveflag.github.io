@@ -353,6 +353,37 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/08/12/%E6%B5%85%E8%B0%88%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E5%90%8E%E7%BC%80%E6%A3%80%E6%B5%8B/" >
+            
+                <span>浅谈文件上传的后缀检测</span>
+        </a>
+        <div class="abstract-content">
+            
+这是油管上的代码,我在思考这种判别后缀的方式有没有漏洞,第一时间想到的是%00截断,但是实验后发现比如1.php%00.jpg,%00后面的已经过滤了,然后.号分隔取最后,无法绕过,我在freebuf上也看到这个白名单检测的问题(http://www.freebuf.com/vuls/128846.html)在分隔成数组之前已经是php后缀了当然往跟深处讲,如果网站有文件包含漏洞的话,将一句话木马变成png上传成功后,再利用文件包含,也是可行的方法!dvwa的后缀检测:更多白名单的后缀检测:(https://www.jb51.net/article/81320.htm)
+
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/12</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "rubbish">rubbish</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/08/03/sql%E6%B3%A8%E5%85%A5%E4%B8%8E%E9%98%B2%E5%BE%A11(mysqli_real_escape_string)/" >
             
                 <span>sql注入与防御1(mysqli_real_escape_string)</span>
@@ -669,45 +700,6 @@ vi /etc/pp...
             <div class= abstract-tags >
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "运维">运维</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >
-            
-                <span>kali下的wpscan破解wordpress</span>
-        </a>
-        <div class="abstract-content">
-            wpscan –update 更新（要梯子）
-wpscan -u http://192.168.154.128/wordpress -e u vp
-http://192.168.154.128/wordpress为我的wordpress地址
--e 参数就是enumerate （列举，枚举，数）
-u 扫描后台用户
-vp 扫描容易受攻击的插件
-我的后台有两个用户，我们选择admin用户进行破解
-wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
--U 指定用户
-–wordlist 指定字典破解
-/key...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/17</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
     
 </div>
             
@@ -1604,9 +1596,26 @@ wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 57
+        Total : 58
         </div>
         <!-- search  -->
         
@@ -1619,6 +1628,11 @@ wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2020/09/23/RSA/" >RSA与费马小定理</a>
+        </li>
     
     
         <li class="archive-post-item">
