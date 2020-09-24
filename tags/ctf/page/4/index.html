@@ -353,6 +353,45 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >
+            
+                <span>kali下的wpscan破解wordpress</span>
+        </a>
+        <div class="abstract-content">
+            wpscan –update 更新（要梯子）
+wpscan -u http://192.168.154.128/wordpress -e u vp
+http://192.168.154.128/wordpress为我的wordpress地址
+-e 参数就是enumerate （列举，枚举，数）
+u 扫描后台用户
+vp 扫描容易受攻击的插件
+我的后台有两个用户，我们选择admin用户进行破解
+wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
+-U 指定用户
+–wordlist 指定字典破解
+/key...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/17</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/06/17/kali%E4%B8%8B%E7%9A%84wifi%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" >
             
                 <span>kali下的wifi渗透测试</span>

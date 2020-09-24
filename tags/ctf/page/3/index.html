@@ -353,6 +353,37 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/09/23/%E7%AC%AC%E4%B8%80%E5%B1%8A%E7%99%BE%E5%BA%A6%E6%9D%AF%20upload/" >
+            
+                <span>第一届百度杯 upload</span>
+        </a>
+        <div class="abstract-content">
+            做了安恒月赛后深受打击,要做点题提高一下观察respond包里面有个base64加密的flag
+手速要快,肯定是要脚本了:
+123456789101112import requests,base64url&#x3D;&quot;http:&#x2F;&#x2F;d14acf28eaad4509867c8e946fb41af8f417e367a8d847ec.game.ichunqiu.com&#x2F;&quot;a&#x3D;requests.session()r&#x3D;a.get(url)flag&#x3D;base64.b64decode(r.headers[&#39;flag...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/09/23</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/09/23/%E5%AE%89%E6%81%92%E6%9D%AF9%E6%9C%88misc1%20crc32%E7%A2%B0%E6%92%9E/" >
             
                 <span>2018安恒杯9月misc1 crc32碰撞</span>
@@ -653,45 +684,6 @@ portfwd...
         <div class="abstract-content">
             
 拐外抹角: http://ctf5.shiyanbar.com/indirection/ 伪静态技术天下武功唯快不破: http://ctf5.shiyanbar.com/web/10/10.php 响应头base64 python解码发包忘记密码了: http://ctf5.shiyanbar.com/10/upload/ vim 备份文件泄露 /.xxx.php.swp 跳转页面截获Once More:http://ctf5.shiyanbar.com/web/more.php ereg()函数漏洞:%00截断Guess Next Session: http://ctf5.shiy...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/17</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >
-            
-                <span>kali下的wpscan破解wordpress</span>
-        </a>
-        <div class="abstract-content">
-            wpscan –update 更新（要梯子）
-wpscan -u http://192.168.154.128/wordpress -e u vp
-http://192.168.154.128/wordpress为我的wordpress地址
--e 参数就是enumerate （列举，枚举，数）
-u 扫描后台用户
-vp 扫描容易受攻击的插件
-我的后台有两个用户，我们选择admin用户进行破解
-wpscan -u http://192.168.154.128/wordpress -U admin –wordlist /key.txt
--U 指定用户
-–wordlist 指定字典破解
-/key...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
