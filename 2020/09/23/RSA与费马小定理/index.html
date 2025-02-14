@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="iloveflag">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="iloveflag">
+    
+    <meta name="keywords" content="iloveflag,iloveflag-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="费马小定理与证明杨辉三角$(x+1)^{p}$二项式展开减去第一项和最后一项，则$(n+1)^{p}-n^{p}-1$是p的倍数 费马小定理费马小定理是数论中的一个定理：假如a是一个整数，p是一个质数，那么$a^{p}-a$是p的倍数，可以表示为  a^{p} \equiv a \quad(\bmod p) a^{p} &#x2F;p -a&#x2F;p&#x3D;0即两个数同余经过变形可成为  a(a^{p-1} -1)\e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA与费马小定理">
+<meta property="og:url" content="https://iloveflag.github.io/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/index.html">
+<meta property="og:site_name" content="iloveflag&#39;s Blog">
+<meta property="og:description" content="费马小定理与证明杨辉三角$(x+1)^{p}$二项式展开减去第一项和最后一项，则$(n+1)^{p}-n^{p}-1$是p的倍数 费马小定理费马小定理是数论中的一个定理：假如a是一个整数，p是一个质数，那么$a^{p}-a$是p的倍数，可以表示为  a^{p} \equiv a \quad(\bmod p) a^{p} &#x2F;p -a&#x2F;p&#x3D;0即两个数同余经过变形可成为  a(a^{p-1} -1)\e">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/iloveflag/images/20200923204921.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/iloveflag/images/20201103105525.png">
+<meta property="article:published_time" content="2020-09-23T12:47:03.000Z">
+<meta property="article:modified_time" content="2025-02-14T14:45:19.304Z">
+<meta property="article:author" content="iloveflag">
+<meta property="article:tag" content="ctf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/iloveflag/images/20200923204921.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>RSA与费马小定理 · iloveflag&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/avatar/avatar.jpg" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="iloveflag's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >iloveflag-blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">RSA与费马小定理</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>iloveflag-blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            RSA与费马小定理
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">777</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/09/23</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="费马小定理与证明"><a href="#费马小定理与证明" class="headerlink" title="费马小定理与证明"></a>费马小定理与证明</h1><h2 id="杨辉三角"><a href="#杨辉三角" class="headerlink" title="杨辉三角"></a>杨辉三角</h2><p>$(x+1)^{p}$二项式展开减去第一项和最后一项，则<br>$(n+1)^{p}-n^{p}-1$是p的倍数</p>
+<h2 id="费马小定理"><a href="#费马小定理" class="headerlink" title="费马小定理"></a>费马小定理</h2><p>费马小定理是数论中的一个定理：假如a是一个整数，p是一个质数，那么$a^{p}-a$是p的倍数，可以表示为</p>
+<script type="math/tex; mode=display">
+a^{p} \equiv a \quad(\bmod p)</script><script type="math/tex; mode=display">
+a^{p} /p -a/p=0</script><p>即两个数同余<br>经过变形可成为</p>
+<script type="math/tex; mode=display">
+a(a^{p-1} -1)\equiv 1 \quad(\bmod p)</script><p>则如果a不是p的倍数，这个定理也可以写成</p>
+<script type="math/tex; mode=display">
+a^{p-1} \equiv 1 \quad(\bmod p)</script><h2 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h2><p>通过杨辉三角形可以看出$(x+1)^{p}$当p为素数时，二项式展开，除了第一项和最后一项，其他系数都是p的倍数，因为二项式展开的系数为${C_{n}^{k-1}}$<br>如图:</p>
+<script type="math/tex; mode=display">
+(x+1)^{n}=x^{n}+n x^{n-1}+\frac{n(n-1)}{2} x^{n-2}+\frac{n(n-1)(n-2)}{2 \times 3} x^{n-3}+...</script><p>当n为质数时，系数分子就不能被分母约分，保留n，所以存在了倍数关系<br>要证明$a^{p}-a$是p的倍数，那么两个式子相加</p>
+<script type="math/tex; mode=display">
+((a+1)^{p}-a^{p}-1)+(a^{p}-a)
+\equiv
+(a+1)^{p}-(a+1)</script><script type="math/tex; mode=display">
+((a+1)^{p}-a^{p}-1)必为p的倍数,
+(a^{p}-a)和(a+1)^{p}-(a+1)相差1项</script><p>则用数学归纳法证明<br>a=1时成立</p>
+<script type="math/tex; mode=display">a^{p}-a=1-1 \equiv 0</script><p>0可以被任意素数整除<br>证明完毕</p>
+<h2 id="卡迈尔数"><a href="#卡迈尔数" class="headerlink" title="卡迈尔数"></a>卡迈尔数</h2><p>但是费马素性检验不是充分必要的</p>
+<p>(卡迈克尔数 Carmichael number）<br>更极端的反例是卡迈克尔数： 假设a与561互质，则$a^560$被561除都余1。这样的数被称为卡迈克尔数，561是最小的卡迈克尔数</p>
+<h1 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h1><p>$\phi(n)$表示小于n的素数个数<br>例如$\phi(8)=4$<br>取出两个互素的a和n<br>$a^{\phi(n)}-1=n$的倍数<br>$a^{\phi(n)}=1 \quad(\bmod n)$<br>当n=素数时，$\phi(n)$=n-1<br>则$a^{n-1}=1 \quad(\bmod n)$<br>即费马小定理</p>
+<h1 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h1><p><img src="https://cdn.jsdelivr.net/gh/iloveflag/images/20200923204921.png" alt="20200923204921"></p>
+<h2 id="为什么e和n要互质"><a href="#为什么e和n要互质" class="headerlink" title="为什么e和n要互质?"></a>为什么e和n要互质?</h2><p>$ed=1 \quad(\bmod n)$<br>d是e的模逆元，由同余解的存在性可知<br>$ax=b \quad(\bmod m)$<br>x解的个数为gcd(a,m)</p>
+<h2 id="费马小定理与rsa的奶子关系"><a href="#费马小定理与rsa的奶子关系" class="headerlink" title="费马小定理与rsa的奶子关系"></a>费马小定理与rsa的奶子关系</h2><p><img src="https://cdn.jsdelivr.net/gh/iloveflag/images/20201103105525.png" alt="20201103105525"></p>
+<h1 id="CTF"><a href="#CTF" class="headerlink" title="CTF"></a>CTF</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">from</span> Crypto.Util <span class="keyword">import</span> number</span><br><span class="line">FLAG = <span class="string">&quot;************************************&quot;</span></span><br><span class="line">mybytes = FLAG.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">flag = <span class="built_in">int</span>.from_bytes(mybytes, <span class="string">&#x27;little&#x27;</span>)</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">p = number.getPrime(<span class="number">2048</span>)</span><br><span class="line">q = number.getPrime(<span class="number">2048</span>)</span><br><span class="line">r = <span class="number">663111019425944540514080507309</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e, phi) <span class="comment">#find d that e*d mod phi=1</span></span><br><span class="line">k = (p-r)*d</span><br><span class="line">enc = gmpy2.powmod(flag, e, p * q) <span class="comment"># pow(flag,e) mod (p*q)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;n&quot;</span>, p*q)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;e&quot;</span>, e)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;k&quot;</span>, k)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;enc&quot;</span>, enc)</span><br><span class="line"><span class="comment">#n = 764789710135699120066739558828098633577013306253421553430847195908034244362783426399681889172711929793563731863384139872322402736681090085666598621114324939409408964563306677742741428195863966989898498906831204752157005288028055139678360291316075877219030667685558110323821117721956754066208709423674599070852863328081495564626811408881020379619280834606394873439653313479059367387482717449792132890040814302415880441497255508283415162957128101398055871020323457216741679183472993371932538507867941404875130906965322325847739960927163953539809036794727803609900302282116111729856921452995125114084009947877974251520302979592670067613546606144401980991349553446645445805493512099309153534117016242573188431650384053169169037929526267038289233193459168030309932136331042640250813278140485915435024593329769782476261202489190771392735516338128092461124553594475652005536021219004598007475896848018535883345275525698202912140165492830229318458220859621536946916060728450732293426918231002157025978449298255884607961112874423611768107044113994666509578842156149561812558917421973274685922015605898024562717582262195308188734233843441532414373538708641762976079302448555298697105806160447760545580129674268456624678445339254341281619657391</span></span><br><span class="line"><span class="comment">#e = 65537</span></span><br><span class="line"><span class="comment">#k = 11376230879464757138290711299984908778464289005173308608189545435463525777268265977729128994228398091834020517958489408848527244519720030536561582611244172458641332639632981518360153087977263620583037286868169984156081495975325137150308201181821183705406433865681037783672009245951450744893423967519534524564872374719067025656950703655360275719627553370956932353637447232396991057691540662128565377895571740302756624004115592822652032877787683190174651306416910281916239819514603714322474683948222133746696116347630808594215555899448203106168014521796360515931362871133025281314243806320464177354177591228332335003551614106832308993911767231860241219942930903683175017203214440697826698228720134550320203010201162227480574211558033922830875117868895970801183417628548046732735178684031479465866770555097097049039401697156697973726498505003813383696303149763801522877588926847414588086172187481338569607545109010485980789181176815929895776940791230453092924387422291052184177606568352378605741988346025715326590594607822822612290794021218154340474272030636989456754518795702696600378337733961339618639033487933752890208434609460829539754273357617487166483257224739734126886305602260084115687043018921964438528469917594211427068125222889990486298031116975211308319185008573568652053973895884503801570264426091699176024805955546836991196229298757508243251307657063191639987383783941231455894746140575040062497070116929901714063774213552073013057990495816268901523247960107878691144148350592800965125699719038873342744331101838577313168280165305316417387319080806526792235761499758367535234473231638455540814177514642349235328627096125963532214440347089295557895745448430528014032156116184317483847359679936198373071447646642313893200567858353913090847963730766120387076016399374559419994285225024354973914324859198201290795827297428960819444555465333396</span></span><br><span class="line"><span class="comment">#enc = 412093036715903128816790953795699287022044216068094761688962237067827011617922387939870348912875721751778771109858780403824076311902683730492233931750791970774429713426105151785974216855033623062170836476535146856670899254646842108216255981889833334584536802754025396041247764488790105972219057375460371490647125698609400300341077029080773163205863745828608512034607447580944258673896462752843386985550199652916670962124910468248134403955249972471292321362551835390767312197538200826967705545638519964452471211583957033796921294363923837791013671753387403623271493340254878112019414988938587497894192020830896786221505942049263600607820879465571254636671934958681859231524860851162323564163724658591380505948307672122532671989440138584048326517351031499576198020315578054570580122064097161740727146596055708533260148164018981133880628043807746488833455752164612507117536000447164187430205500714960736257690852385172040877083740844061320535351927024358525062923099609550661254084283782830424441345671163835622431355492805291956376976262133352159700906015781429216234017365670205976334239654019004580276209764555902322660518746581075014319520704136021241687389064873964101439926478194416552866446689392251268071780662459334135965480296</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line">n = <span class="number">764789710135699120066739558828098633577013306253421553430847195908034244362783426399681889172711929793563731863384139872322402736681090085666598621114324939409408964563306677742741428195863966989898498906831204752157005288028055139678360291316075877219030667685558110323821117721956754066208709423674599070852863328081495564626811408881020379619280834606394873439653313479059367387482717449792132890040814302415880441497255508283415162957128101398055871020323457216741679183472993371932538507867941404875130906965322325847739960927163953539809036794727803609900302282116111729856921452995125114084009947877974251520302979592670067613546606144401980991349553446645445805493512099309153534117016242573188431650384053169169037929526267038289233193459168030309932136331042640250813278140485915435024593329769782476261202489190771392735516338128092461124553594475652005536021219004598007475896848018535883345275525698202912140165492830229318458220859621536946916060728450732293426918231002157025978449298255884607961112874423611768107044113994666509578842156149561812558917421973274685922015605898024562717582262195308188734233843441532414373538708641762976079302448555298697105806160447760545580129674268456624678445339254341281619657391</span></span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">k = <span class="number">11376230879464757138290711299984908778464289005173308608189545435463525777268265977729128994228398091834020517958489408848527244519720030536561582611244172458641332639632981518360153087977263620583037286868169984156081495975325137150308201181821183705406433865681037783672009245951450744893423967519534524564872374719067025656950703655360275719627553370956932353637447232396991057691540662128565377895571740302756624004115592822652032877787683190174651306416910281916239819514603714322474683948222133746696116347630808594215555899448203106168014521796360515931362871133025281314243806320464177354177591228332335003551614106832308993911767231860241219942930903683175017203214440697826698228720134550320203010201162227480574211558033922830875117868895970801183417628548046732735178684031479465866770555097097049039401697156697973726498505003813383696303149763801522877588926847414588086172187481338569607545109010485980789181176815929895776940791230453092924387422291052184177606568352378605741988346025715326590594607822822612290794021218154340474272030636989456754518795702696600378337733961339618639033487933752890208434609460829539754273357617487166483257224739734126886305602260084115687043018921964438528469917594211427068125222889990486298031116975211308319185008573568652053973895884503801570264426091699176024805955546836991196229298757508243251307657063191639987383783941231455894746140575040062497070116929901714063774213552073013057990495816268901523247960107878691144148350592800965125699719038873342744331101838577313168280165305316417387319080806526792235761499758367535234473231638455540814177514642349235328627096125963532214440347089295557895745448430528014032156116184317483847359679936198373071447646642313893200567858353913090847963730766120387076016399374559419994285225024354973914324859198201290795827297428960819444555465333396</span></span><br><span class="line">enc = <span class="number">412093036715903128816790953795699287022044216068094761688962237067827011617922387939870348912875721751778771109858780403824076311902683730492233931750791970774429713426105151785974216855033623062170836476535146856670899254646842108216255981889833334584536802754025396041247764488790105972219057375460371490647125698609400300341077029080773163205863745828608512034607447580944258673896462752843386985550199652916670962124910468248134403955249972471292321362551835390767312197538200826967705545638519964452471211583957033796921294363923837791013671753387403623271493340254878112019414988938587497894192020830896786221505942049263600607820879465571254636671934958681859231524860851162323564163724658591380505948307672122532671989440138584048326517351031499576198020315578054570580122064097161740727146596055708533260148164018981133880628043807746488833455752164612507117536000447164187430205500714960736257690852385172040877083740844061320535351927024358525062923099609550661254084283782830424441345671163835622431355492805291956376976262133352159700906015781429216234017365670205976334239654019004580276209764555902322660518746581075014319520704136021241687389064873964101439926478194416552866446689392251268071780662459334135965480296</span></span><br><span class="line">r = <span class="number">663111019425944540514080507309</span></span><br><span class="line">aa=<span class="built_in">pow</span>(<span class="number">2</span>,e*k+r-<span class="number">1</span>,n)-<span class="number">1</span></span><br><span class="line">p=gmpy2.gcd(aa,n) <span class="comment">#最大公约数求p</span></span><br><span class="line">q=n/p</span><br><span class="line">phi=(p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d=gmpy2.invert(e,phi)</span><br><span class="line">m=gmpy2.powmod(enc,d,n)</span><br><span class="line"><span class="built_in">print</span>(libnum.n2s(m)[::-<span class="number">1</span>]) <span class="comment">#转换为字符串反向</span></span><br><span class="line"><span class="comment">#ZJCTF(f0r_w311_inj3ct&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><p><a href="https://www.youtube.com/watch?v=D_kMadCtKp8">RSA加密算法</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86">费马小定理</a></p>
+<p><a href="https://www.youtube.com/watch?v=aIt1TNj8yKw">费马是如何检验素数的？杨辉三角形和素数有什么关系？</a></p>
+<p><a href="https://www.youtube.com/watch?v=xqol4-uziE0">基于欧拉函数的RSA算法加密原理是什么？RSA算法详解</a></p>
+<p><a href="https://xz.aliyun.com/t/2708">例题</a></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://iloveflag.github.io">iloveflag</a>
+            <p>原文链接：<a href="https://iloveflag.github.io/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/">https://iloveflag.github.io/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/</a>
+            <p>发表日期：<a href="https://iloveflag.github.io/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/">September 23rd 2020, 8:47:03 pm</a>
+            <p>更新日期：<a href="https://iloveflag.github.io/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/">February 14th 2025, 10:45:19 pm</a>
+            <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2021/11/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%8E%8B%E9%81%93%E8%80%83%E7%A0%94%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0/" title= "数据结构-王道考研复习笔记">
+                    <div class="nextTitle">数据结构-王道考研复习笔记</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/09/08/awd%E6%80%BB%E7%BB%93/" title= "awd总结">
+                    <div class="prevTitle">awd总结</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <div id="comment-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.0/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1.6.0/dist/gitalk.min.js"></script>
+    <script>
+        var gitalk = new Gitalk({
+            clientID: '54c5c6bc527e05e0c678',
+            clientSecret: '9d67009d7099559da82f61c73abafce18d09d6d9',
+            id: '1600865223000',
+            repo: 'iloveflag.github.io',
+            owner: 'iloveflag',
+            admin: "iloveflag",
+            createIssueManually: true,
+            distractionFreeMode: false
+        })
+        gitalk.render('comment-container')
+    </script>
+    
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+    
+        
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+          }
+        });
+      </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+            tex2jax: {
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+          });
+      </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+              var all = MathJax.Hub.getAllJax(), i;
+              for(i=0; i < all.length; i += 1) {
+                  all[i].SourceElement().parentNode.className += ' has-jax';
+              }
+          });
+      </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:iloveflag@outlook.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/iloveflag" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86%E4%B8%8E%E8%AF%81%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">费马小定理与证明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92"><span class="toc-number">1.1.</span> <span class="toc-text">杨辉三角</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">费马小定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E6%98%8E"><span class="toc-number">1.3.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%A1%E8%BF%88%E5%B0%94%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">卡迈尔数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RSA"><span class="toc-number">3.</span> <span class="toc-text">RSA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88e%E5%92%8Cn%E8%A6%81%E4%BA%92%E8%B4%A8"><span class="toc-number">3.1.</span> <span class="toc-text">为什么e和n要互质?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86%E4%B8%8Ersa%E7%9A%84%E5%A5%B6%E5%AD%90%E5%85%B3%E7%B3%BB"><span class="toc-number">3.2.</span> <span class="toc-text">费马小定理与rsa的奶子关系</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CTF"><span class="toc-number">4.</span> <span class="toc-text">CTF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">4.1.</span> <span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-number">5.</span> <span class="toc-text">链接</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 61
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2023/09/08/poc-collection/" >poc_collection</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2022/12/12/QVD-2022-46174-thinkphp%E5%A4%9A%E8%AF%AD%E8%A8%80RCE/" >QVD-2022-46174-thinkphp多语言RCE</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/06</span><a class="archive-post-title" href= "/2021/11/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%8E%8B%E9%81%93%E8%80%83%E7%A0%94%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0/" >数据结构-王道考研复习笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2020/09/23/RSA%E4%B8%8E%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/" >RSA与费马小定理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2020/09/08/awd%E6%80%BB%E7%BB%93/" >awd总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/2020/08/05/CyBRICS2020/" >CyBRICS2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/09</span><a class="archive-post-title" href= "/2020/07/09/%E6%B5%85%E8%B0%88phar%E6%96%87%E4%BB%B6%E5%9C%A8ctf%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" >浅谈phar文件在ctf中的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/2020%E8%85%BE%E8%AE%AF%E7%8A%80%E7%89%9B%E9%B8%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9Bwp/" >2020腾讯犀牛鸟网络安全T-Star高校挑战赛wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/14</span><a class="archive-post-title" href= "/2020/06/14/nginx-php-vscode-xdebug/" >nginx-php-vscode-xdebug</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/13</span><a class="archive-post-title" href= "/2020/06/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%B5%99%E5%A4%A7%E7%89%88%E5%92%95%E5%92%95%E5%92%95%E4%BA%86/" >数据结构-浙大版咕咕咕了</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/16</span><a class="archive-post-title" href= "/2020/01/16/from-img-to-xss/" >from_img_to_xss</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2019/12/26/hash-hmac-php-bug/" >hash_hmac_php_bug</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href= "/2019/08/27/%E4%BB%8E%E9%9D%A2%E8%AF%95%E4%B8%AD%E5%8F%91%E7%8E%B0%E6%9C%AA%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/" >从面试中发现未学到的知识点</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/07</span><a class="archive-post-title" href= "/2019/08/07/hitcon-ctf-2017-ssrfme/" >hitcon-ctf-2017-ssrfme</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2019/08/04/de1tactf2019_ssrf_me/" >de1tactf2019_ssrf_me</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2019/08/04/thinkphp5-0-sql-injection%E5%88%86%E6%9E%90/" >thinkphp5.0_sql_injection分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/sql%E6%B3%A8%E5%85%A5/" >sql注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span><a class="archive-post-title" href= "/2019/07/12/%E5%BF%AB%E9%80%9F%E6%9F%A5%E8%AF%A2%E6%95%B4%E7%90%86/" >快速查询整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/15</span><a class="archive-post-title" href= "/2019/06/15/rbash%E9%80%83%E9%80%B8/" >rbash逃逸</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span><a class="archive-post-title" href= "/2019/05/23/vulhub-learning/" >vulhub-learning</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2019/05/14/apache%E5%9F%BA%E4%BA%8E%E5%A4%9Aip%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE+%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81/" >apache基于多ip的虚拟主机配置+文件服务器和账号密码</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2019/05/05/pwn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" >pwn学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/11</span><a class="archive-post-title" href= "/2019/04/11/2019%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91web/" >2019西湖论剑web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/22</span><a class="archive-post-title" href= "/2019/03/22/Python%E8%84%9A%E6%9C%AC%E4%B8%8EMetasploit%E4%BA%A4%E4%BA%92%E6%89%B9%E9%87%8F%E4%BA%A7%E5%87%BAMS17_010_shell/" >Python脚本与Metasploit交互批量产出MS17_010 shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2019/03/05/pentesterlab%E4%B8%ADxss+Code%20injection%E7%9A%84%E7%BB%83%E4%B9%A0/" >pentesterlab中xss+Code injection的练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/22</span><a class="archive-post-title" href= "/2019/02/22/hgame2019%20%E9%83%A8%E5%88%86web-wp/" >hgame2019 部分web-wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2019/02/08/phpMyAdmin%E6%8F%90%E6%9D%83/" >phpMyAdmin提权</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span><a class="archive-post-title" href= "/2018/11/27/%E7%94%A8updatexml%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E8%A7%A3%E5%87%BA2018nctf%20%E6%BB%B4!%E6%99%A8%E8%B7%91%E6%89%93%E5%8D%A1/" >用updatexml报错注入技术解出2018nctf 滴!晨跑打卡</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2018/11/18/2018hctf%20web/" >2018hctf web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/26</span><a class="archive-post-title" href= "/2018/10/26/%E5%BC%82%E6%88%96%E7%9A%84%E7%A0%94%E7%A9%B6/" >异或的研究</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2018/10/17/2018%E6%9D%AD%E7%94%B5%E5%85%AC%E6%B5%8Bctf%20writeup/" >2018杭电公测ctf writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span><a class="archive-post-title" href= "/2018/10/14/'%E2%80%9C%E7%99%BE%E5%BA%A6%E6%9D%AF%E2%80%9D2017%E5%B9%B4%E6%98%A5%E7%A7%8B%E6%AC%A2%E4%B9%90%E8%B5%9B%EF%BC%9A%20%20%E4%B8%80%E4%B8%AAip%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E6%9C%BA%E4%BC%9A%EF%BC%8C%E5%93%88%E5%93%88%E5%93%88%E3%80%82'/" >百度杯2017年春秋欢乐赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/10</span><a class="archive-post-title" href= "/2018/10/10/Centos7%20%E5%AE%9E%E7%8E%B0ngrok%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >Centos7 实现ngrok内网穿透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/08</span><a class="archive-post-title" href= "/2018/10/08/kali%20%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" >kali 基本软件安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2018/09/23/%E5%AE%89%E6%81%92%E6%9D%AF9%E6%9C%88misc1%20crc32%E7%A2%B0%E6%92%9E/" >2018安恒杯9月misc1 crc32碰撞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2018/09/23/%E7%AC%AC%E4%B8%80%E5%B1%8A%E7%99%BE%E5%BA%A6%E6%9D%AF%20upload/" >第一届百度杯 upload</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/20</span><a class="archive-post-title" href= "/2018/09/20/wanna-to-see-your-hat-writeup/" >wanna to see your hat? writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/16</span><a class="archive-post-title" href= "/2018/09/16/centos7%20django+uwsgi+nginx%E9%85%8D%E7%BD%AE/" >centos7 django+uwsgi+nginx配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2018/09/13/HITCON2017(babyfirst-revenge)%20writeup/" >HITCON2017(babyfirst-revenge) writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/2018/09/10/centos%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%85/" >centos常见服务安装</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2018/08/23/%E5%8D%97%E9%82%AEctf/" >南邮ctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2018/08/18/Docker%E7%9A%84%E5%A4%A7%E5%9D%91%E8%AE%B0%E5%BD%95/" >Docker的大坑记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/2018/08/16/requests%E8%BF%9B%E8%A1%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >requests进行文件上传</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2018/08/12/%E6%B5%85%E8%B0%88%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E5%90%8E%E7%BC%80%E6%A3%80%E6%B5%8B/" >浅谈文件上传的后缀检测</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/2018/08/03/sql%E6%B3%A8%E5%85%A5%E4%B8%8E%E9%98%B2%E5%BE%A11(mysqli_real_escape_string)/" >sql注入与防御1(mysqli_real_escape_string)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2018/07/23/%E5%AE%89%E6%81%92%E6%9D%AF7%E6%9C%88/" >2018安恒杯7月</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2018/07/23/%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/" >远程命令注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span><a class="archive-post-title" href= "/2018/07/03/kali%E8%8E%B7%E5%8F%96%E6%8C%81%E7%BB%AD%E6%80%A7%E5%90%8E%E9%97%A8shell/" >kali获取持续性后门shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span><a class="archive-post-title" href= "/2018/07/02/ms17_010%E5%92%8Cms08-067%E5%AE%9E%E9%AA%8C%E7%AC%94%E8%AE%B0/" >ms17_010和ms08-067实验笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2018/06/27/javascript%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%8F%98%E6%8D%A2/" >javascript实现图片变换</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/php%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E4%B9%8B%E6%88%AA%E6%96%AD%E4%B8%8A%E4%BC%A0/" >php 文件上传漏洞之%00截断上传</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AE%20httpd/" >centos6.4配置 httpd</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%99%A8/" >centos6.4配置dns服务器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEnfs/" >centos6.4配置nfs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEsamba/" >centos6.4配置samba</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEtelnet/" >centos6.4配置telnet</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/centos6.4%E9%85%8D%E7%BD%AEvpn/" >centos6.4配置vpn</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/kali%E4%B8%8B%E7%9A%84wifi%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" >kali下的wifi渗透测试</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/kali%E4%B8%8B%E7%9A%84wpscan%E7%A0%B4%E8%A7%A3wordpress/" >kali下的wpscan破解wordpress</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/windows%E5%92%8Clinux%E4%BA%92%E9%80%9A/" >windows和linux互通</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2018/06/17/%E5%AE%9E%E9%AA%8C%E5%90%A7web%E6%80%9D%E8%B7%AF/" >实验吧web思路</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="运维"><span class="iconfont-archer">&#xe606;</span>运维</span>
+    
+        <span class="sidebar-tag-name" data-tags="rubbish"><span class="iconfont-archer">&#xe606;</span>rubbish</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "iloveflag"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
+
+
